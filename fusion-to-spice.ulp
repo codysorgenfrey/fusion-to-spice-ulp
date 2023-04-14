@@ -1,0 +1,63 @@
+#require 6.0100
+
+string convertPart(UL_PART P) {
+    string res;
+
+    if (strstr(P.name, "R") == 0) {
+        int x, y, r;
+        P.attributes(A) {
+            if (A.name == "X") {
+                x = A.value;
+            }
+            if (A.name == "Y") {
+                y = A.value;
+            }
+            if (A.name == "R") {
+                r = A.value;
+            }
+        }
+        res += "SYMBOL res " + x + " " + y + " R" + r + "\n";
+        res += "SYMATTR InstName " + P.name + "\n";
+        res += "SYMATTR Value " + P.value + "\n";
+    }
+
+    return res;
+}
+
+string exportParts() {
+    string res;
+    res += "Version 4\n";
+
+    schematic(S){
+    	S.parts(P){
+         	res += convertPart(P);
+        }
+    }
+
+    return res;
+}
+
+string getSaveFilePath() {
+    string fileName = "schematic";
+    schematic(S){
+    	fileName = strsub(S.name, 0, strlen(S.name) - 4);
+    }
+    return dlgFileSave("Save file as", fileName+".asc", "*.asc");
+}
+
+void main() {
+    if (!schematic) {
+        dlgMessageBox("Script must be run in a schematic.");
+        return;
+    }
+
+    string filepath = getSaveFilePath();
+    if (filepath != "") {
+        status("exporting partList to " + filepath);
+        output(filepath, "wt") {
+            printf(exportParts());
+        }
+        dlgMessageBox("Exported schematic to " + filepath);
+    }
+
+}
