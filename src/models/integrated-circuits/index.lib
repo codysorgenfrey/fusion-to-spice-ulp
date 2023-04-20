@@ -1,2 +1,4 @@
 .include ./opamps/op275.sub
 .include ./opamps/lm358.sub
+.include ./opamps/lm358_simple.sub
+.include ./opamps/tl072.sub

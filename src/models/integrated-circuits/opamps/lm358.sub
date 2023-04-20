@@ -1,4 +1,4 @@
-.subckt LM358 AIN+ AIN- AOUT BIN+ BIN- BOUT VCC VEE
+.subckt LMX58_LM2904 AIN+ AIN- AOUT BIN+ BIN- BOUT VCC VEE
   X1 AIN+ AIN- VCC VEE AOUT LMX58_LM2904
   X2 BIN+ BIN- VCC VEE BOUT LMX58_LM2904
 .ends
@@ -35,7 +35,7 @@
 * INPUT OFFSET VOLTAGE VS. INPUT COMMON-MODE VOLTAGE (Vos vs. Vcm)
 * INPUT/OUTPUT ESD CELLS (ESDin, ESDout)
 ******************************************************
-.subckt LMX58_LM2904 IN+ IN- VCC VEE OUT
+.subckt LMX58_LM2904_SINGLE IN+ IN- VCC VEE OUT
 ******************************************************
 * MODEL DEFINITIONS:
 .model BB_SW VSWITCH(Ron=50 Roff=1e12 Von=700e-3 Voff=0)
