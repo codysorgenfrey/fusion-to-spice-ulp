@@ -1,0 +1,5 @@
+.include ./diodes/index.lib
+.include ./integrated-circuits/index.lib
+.include ./potentiometers/index.lib
+.include ./switches/index.lib
+.include ./transistors/index.lib

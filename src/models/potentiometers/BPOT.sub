@@ -1,0 +1,5 @@
+.subckt BPOT 1 2 3 R=100K POS=0.0
+  .param safePOS={min(0.999, max(0.001, POS))}
+  r0 1 2 {R*safePOS}
+  r1 2 3 {R*(1-safePOS)}
+.ends

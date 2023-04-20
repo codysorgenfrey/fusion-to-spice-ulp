@@ -1,0 +1,16 @@
+.include ./models.lib
+
+* xvive VTL5C3
+*
+* on res = 4-7K
+* off res = 10M
+*
+*              LED+
+*              | LED-
+*              | | Resistor 1
+*              | | | Resistor 2
+*              | | | |
+.subckt VTL5C3 1 2 3 4
+  D1 1 2 LedRed
+  r1 3 4 5.5K
+.ends

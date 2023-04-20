@@ -1,0 +1,6 @@
+.include ./models.lib
+
+.subckt RED_ANODE_GREEN R- VCC G-
+  D1 VCC R- LedRed
+  D2 VCC G- LedGreen
+.ends

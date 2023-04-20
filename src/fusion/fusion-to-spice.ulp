@@ -1,0 +1,118 @@
+#require 6.0100
+
+int partNum = 0;
+int step = 160;
+
+string dtostr (real d) {
+   string str = "";
+   sprintf(str, "%1.0f", d);
+   return str;
+}
+
+string itostr (int i) {
+   string str = "";
+   sprintf(str, "%d", i);
+   return str;
+}
+
+string getPartNumber(string name) {
+    int len;
+    int numIndex = strxstr(name, "[0-9]+", 0, len);
+    if (numIndex >= 0) {
+        return strsub(name, numIndex, len);
+    }
+    return "";
+}
+
+string getFileName(string name) {
+    int len;
+    int numIndex = strxstr(name, "[^\\\/]*$", 0, len);
+    if (numIndex >= 0) {
+        return strsub(name, numIndex, len - 4);
+    }
+    return name;
+}
+
+string getPinNet(string partName, string pinName) {
+    schematic(S) S.nets(N) N.pinrefs(PR) {
+        if (PR.part.name == partName) {
+            string gateName = PR.instance.gate.name + ".";
+            if (gateName == "G$1.") gateName = "";
+            if ((gateName + PR.pin.name) == pinName) {
+                if (N.name == "GND") return "0";
+                if (strsub(N.name, 0, 2) == "N$") return strsub(N.name, 2, strlen(N.name) - 2);
+                return N.name;
+            }
+        }
+    }
+    return "?";
+}
+
+string partLine(UL_PART P) {
+    string res;
+    if (
+        P.attribute["SPICEPREFIX"]
+        && P.attribute["SPICEPINOUT"]
+    ) {
+        // device name
+        string spicePre = P.attribute["SPICEPREFIX"];
+        string partPre = P.device.prefix;
+        if (partPre == spicePre) res += P.name + " ";
+        else res += P.attribute["SPICEPREFIX"] + P.name + " ";
+
+        // pinout
+        string pinNames[];
+        int pinCount = strsplit(pinNames, P.attribute["SPICEPINOUT"], ' ');
+        for (int i=0; i<pinCount; i++) {
+            res += getPinNet(P.name, pinNames[i]) + " ";
+        }
+
+        // value
+        res += P.value;
+    } 
+    return res;
+}
+
+string exportSchematic() {
+    string title, models, parts, commands;
+
+    schematic(S){
+        title = getFileName(S.name) + "\n";
+        S.allparts(P) {
+            string modelEntry = P.attribute["SPICEMODEL"];
+            if (strstr(models, modelEntry) < 0) models += modelEntry + "\n";
+            
+            string partEntry = partLine(P);
+            if (strstr(parts, partEntry) < 0) parts += partEntry + "\n";
+        }
+        S.sheets(SH) SH.texts(T) {
+            if (strstr(T.value, ".") == 0) commands += T.value + "\n";
+        }
+    }
+
+    return title + models + parts + commands;
+}
+
+string getSaveFilePath() {
+    string fileName = "schematic";
+    schematic(S){
+    	fileName = getFileName(S.name);
+    }
+    return dlgFileSave("Save file as", fileName + ".cir", "*.cir");
+}
+
+void main() {
+    if (!schematic) {
+        dlgMessageBox("Script must be run in a schematic.");
+        return;
+    }
+
+    string filepath = getSaveFilePath();
+    if (filepath != "") {
+        status("exporting schematic to " + filepath);
+        output(filepath, "wt") {
+            printf(exportSchematic());
+        }
+    }
+
+}

@@ -1,0 +1,4 @@
+.include ./3PDT.sub
+.include ./DPDT.sub
+.include ./SPDT.sub
+.include ./SPST.sub
