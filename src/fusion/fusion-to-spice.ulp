@@ -51,8 +51,8 @@ string getPinNet(string partName, string pinName) {
 string partLine(UL_PART P) {
     string res;
     if (
-        P.attribute["SPICEPREFIX"]
-        && P.attribute["SPICEPINOUT"]
+        P.attribute["SPICEPREFIX"] != ""
+        && P.attribute["SPICEPINOUT"] != ""
     ) {
         // device name
         string spicePre = P.attribute["SPICEPREFIX"];
@@ -115,4 +115,11 @@ void main() {
         }
     }
 
+    string launchNgspice = "ngspice \"" + filepath + "\"";
+    if (strstr(OS_SIGNATURE, "Windows") == 0) {
+        launchNgspice = "wt " + launchNgspice;
+    } else {
+        launchNgspice += " &";
+    }
+    system(launchNgspice);
 }

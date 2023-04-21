@@ -1,8 +1,8 @@
 .subckt SPST 1 2 POS=0
   .if (POS == 1)
-    .param th1={1e-12}
+    .param th1={-1T}
   .else
-    .param th1={1e+12}
+    .param th1={1T}
   .endif
   r1 1 2 R={th1}
 .ends

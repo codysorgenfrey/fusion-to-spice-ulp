@@ -10,7 +10,7 @@
 *              | | Resistor 1
 *              | | | Resistor 2
 *              | | | |
-.subckt VTL5C3 1 2 3 4
+.subckt VTL5C3 1 2 3 4 R=1Meg
   D1 1 2 LedRed
-  r1 3 4 5.5K
+  r1 3 4 R={R}
 .ends
