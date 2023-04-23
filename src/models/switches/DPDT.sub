@@ -1,13 +1,14 @@
 .subckt DPDT 1 2 3 4 5 6 POS=0
-  .if (POS == 1)
-    .param th1={1T}
-    .param th2={-1T}
+  * .param doesnt work in if..else
+  .if (POS >= 1)
+    r1 1 2 1G
+    r2 2 3 0.01
+    r3 4 5 1G
+    r4 5 6 0.01
   .else
-    .param th1={-1T}
-    .param th2={1T}
+    r1 1 2 0.01
+    r2 2 3 1G
+    r3 4 5 0.01
+    r4 5 6 1G
   .endif
-  r1 1 2 R={th1}
-  r2 2 3 R={th2}
-  r3 4 5 R={th1}
-  r4 5 6 R={th2}
 .ends

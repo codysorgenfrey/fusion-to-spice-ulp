@@ -1,8 +1,8 @@
 .subckt SPST 1 2 POS=0
-  .if (POS == 1)
-    .param th1={-1T}
+  * .param doesnt work in if..else
+  .if (POS >= 1)
+    r1 1 2 0.01
   .else
-    .param th1={1T}
+    r1 1 2 1G
   .endif
-  r1 1 2 R={th1}
 .ends
