@@ -1,0 +1,14 @@
+Testing VTL5C3
+.include ./models/index.lib
+
+I1 LED+ 0 1mA
+X1 LED+ 0 LDR1 0 VTL5C3
+I2 1 0 1A
+Vm1 1 LDR1 0V
+
+.control 
+  dc I1 0.1mA 1mA 100uA
+  plot xlog v(LDR1)/i(Vm1)
+.endc
+
+.end

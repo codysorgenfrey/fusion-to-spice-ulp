@@ -1,4 +1,5 @@
 * VTL5C2 from LTSpice model by Tom Gootee
+
 .subckt VTL5C2 LED+ LED- LDR1 LDR2
   * In LED
   D1 LED+ LED- NSPW500BS
@@ -7,6 +8,7 @@
   R2 IE1 0 1
   R5 IE1 ID1 1K
   C1 ID1 0 10nF
+  * table entries (x = led current mA, y = LDR resistance 1000/Ohms)
   G1 IG1 0 TABLE {v(ID1)}=((.074,0.0005) (0.1,0.00111) (0.12,0.001934) (0.13,0.00250) (0.14,0.00313) (0.15,0.00383) (0.17,0.00501) (0.2,0.00714) (0.3,0.0156) (0.4,0.0286) (0.5,0.0443) (0.6,0.0588) (0.7,0.0769) (0.8,0.100) (0.9,0.123) (1.0,0.139) (2.0,0.370) (3.0,0.625) (4.0,0.820) (5.0,1.00) (6.0,1.25) (7.0,1.429) (8.0,1.67) (9.0,1.92) (10.0,2.00) (20,3.125) (30,3.57) (40,4.55) )
   R3 IG1 0 1
   B3 IG1 CB2 I={sqrt(abs(v(IG1,CB2)))*v(IG1,CB2)*0.001}
@@ -17,7 +19,6 @@
   * Out current
   B2 LDR2 LDR1 I={0.001*V(CB2)*V(LDR1,LDR2)}
   C2 LDR2 LDR1 100nF
-
 .ends
 
 .model NSPW500BS D (Is=0.27n Rs=5.65 N=6.79 Cjo=42p Xti=200)
