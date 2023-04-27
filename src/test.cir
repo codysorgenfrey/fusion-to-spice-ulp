@@ -7,8 +7,10 @@ I2 1 0 1A
 Vm1 1 LDR1 0V
 
 .control 
-  dc I1 0.1mA 1mA 100uA
-  plot xlog v(LDR1)/i(Vm1)
+  dc I1 0.1mA 1mA 0.1mA
+  dc I1 1mA 10mA 1mA
+  dc I1 10mA 40mA 10mA
+  plot xlog dc1.v(LDR1)/dc1.i(Vm1) dc2.v(LDR1)/dc2.i(Vm1) dc3.v(LDR1)/dc3.i(Vm1)
 .endc
 
 .end
