@@ -3,14 +3,44 @@ Testing VTL5C3
 
 I1 LED+ 0 1mA
 X1 LED+ 0 LDR1 0 VTL5C3
+X2 LED+ 0 LDR2 0 VTL5C2
 I2 1 0 1A
 Vm1 1 LDR1 0V
+I3 2 0 1A
+Vm2 2 LDR2 0V
 
 .control 
-  dc I1 0.1mA 1mA 0.1mA
-  dc I1 1mA 10mA 1mA
-  dc I1 10mA 40mA 10mA
-  plot xlog dc1.v(LDR1)/dc1.i(Vm1) dc2.v(LDR1)/dc2.i(Vm1) dc3.v(LDR1)/dc3.i(Vm1)
+  let steps = 22
+  let vecInCur = vector(steps)
+  let VTL5C2 = vector(steps)
+  let VTL5C3 = vector(steps)
+  let index = 0
+  let inCur = 1e-4
+
+  repeat $&steps
+    alter I1 $&inCur
+    print inCur
+    op
+
+    let vecInCur[index] = inCur
+    let VTL5C2[index] = v(LDR2)/i(Vm2)
+    let VTL5C3[index] = v(LDR1)/i(Vm1)
+
+    let curStep = 1e-2
+    if inCur < 1e-2
+      echo 'less than 1e-2'
+      let curStep = 1e-3
+    end
+    if inCur < 1e-3
+      echo 'less than 1e-3'
+      let curStep = 1e-4
+    end
+
+    let index = index + 1
+    let inCur = inCur + curStep
+  end
+
+  plot xlog VTL5C3 vs vecInCur xlabel 'In current' ylabel 'Out resistance'
 .endc
 
 .end
