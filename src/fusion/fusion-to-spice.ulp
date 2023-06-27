@@ -74,10 +74,13 @@ string partLine(UL_PART P) {
 }
 
 string exportSchematic() {
-    string title, models, parts, commands;
+    string title, includes, models, parts, commands;
 
     schematic(S){
-        title = getFileName(S.name) + "\n";
+        title = getFileName(S.name) + "\n\n";
+
+        includes = ".include \"D:\\Dev\\fusion-to-spice-ulp\\src\\models\\index.lib\"\n\n";
+
         S.allparts(P) {
             string modelEntry = P.attribute["SPICEMODEL"];
             if (strstr(models, modelEntry) < 0) models += modelEntry + "\n";
@@ -85,12 +88,15 @@ string exportSchematic() {
             string partEntry = partLine(P);
             if (strstr(parts, partEntry) < 0) parts += partEntry + "\n";
         }
+
+        parts += "\n";
+
         S.sheets(SH) SH.texts(T) {
             if (strstr(T.value, ".") == 0) commands += T.value + "\n";
         }
     }
 
-    return title + models + parts + commands;
+    return title + includes + models + parts + commands;
 }
 
 string getSaveFilePath() {
